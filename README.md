@@ -1,6 +1,7 @@
 ![](https://img.shields.io/static/v1?label=technology&message=git&color=blue)
 ![](https://img.shields.io/static/v1?label=technology&message=github&color=red)
 ![](https://img.shields.io/static/v1?label=school&message=platzi&color=green)
+![](https://img.shields.io/static/v1?label=school&message=Curso Profesional de Git y GitHub&color=green)
 
 # Github
 Documentación de comandos y tips de github. Tomado del curso de Platzi.
