@@ -1,7 +1,7 @@
 ![](https://img.shields.io/static/v1?label=technology&message=git&color=blue)
 ![](https://img.shields.io/static/v1?label=technology&message=github&color=red)
 ![](https://img.shields.io/static/v1?label=school&message=platzi&color=green)
-![](https://img.shields.io/static/v1?label=school&message=Curso Profesional de Git y GitHub&color=green)
+![](https://img.shields.io/static/v1?label=course&message=CursoProfesionaldeGityGitHub&color=green)
 
 # Github
 Documentación de comandos y tips de github. Tomado del curso de Platzi.
@@ -139,3 +139,43 @@ Este comando nos ayuda a volver en el tiempo. Pero no como git checkout que nos 
 
 `git remote set-url origin url-ssh-del-repositorio-en-github`
 
+### Tags y versiones en Git y GitHub
+- Los tags o etiquetas nos permiten asignar versiones a los commits con cambios más importantes o significativos de nuestro proyecto.
++ Comandos para trabajar con etiquetas:
+  + `git tag -a nombre-del-tag id-del-commit`, crear un nuevo tag y asignarlo a un commit.
+  + `git tag -d nombre-del-tag`, borrar un tag en el repositorio local.
+  + `git tag o git show-ref --tags`, listar los tags de nuestro repositorio local.
+  + `git push origin --tags`, publicar un tag en el repositorio remoto.
+  + `git tag -d nombre-del-tag` o `git push origin :refs/tags/nombre-del-tag`, borrar un tag del repositorio remoto.
+
+### Manejo de ramas en GitHub
+- `git branch nombre-de-la-rama` o `git checkout -b nombre-de-la-rama`, crear una rama en el repositorio local.
+- `git push origin nombre-de-la-rama`, publicar una rama local al repositorio remoto.
+
+### Flujo de trabajo profesional con Pull requests
+- En un entorno profesional normalmente se bloquea la rama master, y para enviar código a dicha rama pasa por un code review y luego de su aprobación se unen códigos con los llamados merge request.
+- Para realizar pruebas enviamos el código a servidores que normalmente los llamamos staging develop (servidores de pruebas) luego de que se realizan las pruebas pertinentes tanto de código como de la aplicación estos pasan a el servidor de producción con el ya antes mencionado merge request.
+
+## Git Stash: Guardar cambios en memoria y recuperarlos después
+- Cuando necesitamos regresar en el tiempo porque borramos alguna línea de código pero no queremos pasarnos a otra rama porque nos daría un error ya que debemos pasar ese “mal cambio” que hicimos a stage, podemos usar git stash para regresar el cambio anterior que hicimos.
+- `git stash`, típico cuando estamos cambios que no merecen una rama o no merecen un rebase si no simplemente estamos probando algo y luego quieres volver rápidamente a tu versión anterior la cual es la correcta.
+
+## Git Clean: limpiar tu proyecto de archivos no deseados
+- A veces creamos archivos cuando estamos realizando nuestro proyecto que realmente no forman parte de nuestro directorio de trabajo, que no se deberían agregar y lo sabemos.
+- `git clean --dry-run`, para saber qué archivos vamos a borrar tecleamos. 
+- `git clean -f`, borra todos los archivos listados (que no son carpetas) tecleamos.
+
+## Git Amend: reconstruir commits
+- `git commit --amend`, A veces hacemos un commit, pero resulta que no queríamos mandarlo porque faltaba algo más. Lo que hará es que los cambios que hicimos nos los agregará al commit anterior.
+
+## Git Reset y Reflog: úsese en caso de emergencia
+- `git reset HashDelHEAD` nos devolveremos al estado en que el proyecto funcionaba.
+- `git reset --soft HashDelHEAD`, te mantiene lo que tengas en staging ahí.
+- `git reset --hard HashDelHEAD`, resetea absolutamente todo incluyendo lo que tengas en staging.
+- **Es una mala práctica, no deberías usarlo en ningún momento; debe ser nuestro último recurso**.
+
+## Git con Grep y log: Buscar en archivos y commits
+- `git grep palabraQueEstamosBuscandoEnElProyecto`, buscará en todo el proyecto los archivos en donde está la palabra *palabraQueEstamosBuscandoEnElProyecto*.
+- `git grep -n palabraQueEstamosBuscandoEnElProyecto` nos saldrá un output el cual nos dirá en qué línea está lo que estamos buscando.
+- `git grep -c palabraQueEstamosBuscandoEnElProyecto` nos saldrá un output el cual nos dirá cuántas veces se repite esa palabra y en qué archivo.
+- `git grep -c "<p>"`, si queremos buscar cuántas veces utilizamos un atributo de HTML.
