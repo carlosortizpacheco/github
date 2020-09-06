@@ -70,31 +70,59 @@ Documentación de comandos y tips de github. Tomado del curso de Platzi.
  ### git rm
 Elimina archivos de Git sin eliminar su historial del sistema de versiones. Esto quiere decir que si necesitamos recuperar el archivo solo debemos “viajar en el tiempo” y recuperar el último commit antes de borrar el archivo en cuestión.
 
-Recuerda que `git rm` no puede usarse así nomás. Debemos usar uno de los flags para indicarle a Git cómo eliminar los archivos que ya no necesitamos en la última versión del proyecto.
++ Recuerda que `git rm` no puede usarse así nomás. Debemos usar uno de los flags para indicarle a Git cómo eliminar los archivos que ya no necesitamos en la última versión del proyecto.
   + `git rm --cached`, elimina los archivos del área de Staging y del próximo commit pero los mantiene en nuestro disco duro
   + `git rm --force`, elimina los archivos de Git y del disco duro. Git siempre guarda todo, por lo que podemos acceder al registro de la existencia de los archivos, de modo que podremos recuperarlos si es necesario.
 
 ### git reset
 Este comando nos ayuda a volver en el tiempo. Pero no como git checkout que nos deja ir, mirar, pasear y volver. **Volvemos al pasado sin la posibilidad de volver al futuro. Borramos la historia y la debemos sobreescribir. No hay vuelta atrás**.
 
-Hay dos formas de usar git reset: con el argumento --hard, borrando toda la información que tengamos en el área de staging (y perdiendo todo para siempre). O, un poco más seguro, con el argumento --soft, que mantiene allí los archivos del área de staging para que podamos aplicar nuestros últimos cambios pero desde un commit anterior.
+- `git reset --hard`, borra toda la información que tengamos en el área de staging (**y perdiendo todo para siempre**). Borra todo. Todo todito, absolutamente todo. Toda la información de los commits y del área de staging se borra del historial.
+- `git reset --soft`, mantiene allí los archivos del área de staging para que podamos aplicar nuestros últimos cambios pero desde un commit anterior. Borramos todo el historial y los registros de Git pero guardamos los cambios que tengamos en Staging, así podemos aplicar las últimas actualizaciones a un nuevo commit.
+- `git reset HEAD`, saca archivos del área de Staging. No para borrarlos ni nada de eso, solo para que los últimos cambios de estos archivos no se envíen al último commit, a menos que cambiemos de opinión y los incluyamos de nuevo en staging con `git add`.
 
-git reset --soft: Borramos todo el historial y los registros de Git pero guardamos los cambios que tengamos en Staging, así podemos aplicar las últimas actualizaciones a un nuevo commit.
-git reset --hard: Borra todo. Todo todito, absolutamente todo. Toda la información de los commits y del área de staging se borra del historial.
-¡Pero todavía falta algo!
+## Flujo de trabajo básico con un repositorio remoto
+- `git clone url_del_servidor_remoto`, descarga los archivos de la última versión de la rama principal y todo el historial de cambios en la carpeta .git.
+- `git push`, luego de hacer `git add` y `git commit` debemos ejecutar este comando para mandar los cambios al servidor remoto.
+- `git fetch`, lo usamos para traer actualizaciones del servidor remoto y guardarlas en nuestro repositorio local.
+- `git merge`, también usamos el comando `git fetch` con servidores remotos. Lo necesitamos para combinar los últimos cambios del servidor remoto y nuestro directorio de trabajo.
+- `git pull`, básicamente, `git fetch` y `git merge` al mismo tiempo.
 
-git reset HEAD: Este es el comando para sacar archivos del área de Staging. No para borrarlos ni nada de eso, solo para que los últimos cambios de estos archivos no se envíen al último commit, a menos que cambiemos de opinión y los incluyamos de nuevo en staging con git add, por supuesto.
-¿Por qué esto es importante?
-Imagina el siguiente caso:
+ ### Introducción a las ramas o branches
+- Las ramas son la forma de hacer cambios en nuestro proyecto sin afectar el flujo de trabajo de la rama principal.
+- La cabecera o HEAD representan la rama y el commit de esa rama donde estamos trabajando. Por defecto, es el último commit de nuestra rama principal. Pero podemos cambiarlo al crear una rama (`git branch rama`, `git checkout -b rama`) o movernos en el tiempo a cualquier otro commit de cualquier otra rama con los comandos (`git reset id-commit`, `git checkout rama-o-id-commit`).
 
-Hacemos cambios en los archivos de un proyecto para una nueva actualización. Todos los archivos con cambios se mueven al área de staging con el comando git add. Pero te das cuenta de que uno de esos archivos no está listo todavía. Actualizaste el archivo pero ese cambio no debe ir en el próximo commit por ahora.
+### Fusión de ramas con Git merge
+- `git merge`, permite crear un nuevo commit con la combinación de dos ramas (la rama donde nos encontramos cuando ejecutamos el comando y la rama que indiquemos después del comando).
+- Al ejecutar el comando `git checkout` para cambiar de rama o commit **puedes perder el trabajo que no hayas guardado. Guarda tus cambios antes de hacer git checkout**.
 
-¿Qué podemos hacer?
+### Resolución de conflictos al hacer un merge
+- Git nunca borra nada a menos que nosotros se lo indiquemos. Cuando usamos los comandos `git merge` o `git checkout` estamos cambiando de rama o creando un nuevo commit, no borrando ramas ni commits (recuerda que puedes borrar commits con `git reset` y ramas con `git branch -d`).
+- Siempre debemos crear un nuevo commit para aplicar los cambios del merge. Si Git puede resolver el conflicto hará commit automáticamente.
+- Los archivos con conflictos por el comando `git merge` entran en un nuevo estado que conocemos como Unmerged. Funcionan muy parecido a los archivos en estado Unstaged, algo así como un estado intermedio entre Untracked y Unstaged, solo debemos ejecutar `git add` para pasarlos al área de staging y `git commit` para aplicar los cambios en el repositorio.
 
-Bueno, todos los cambios están en el área de Staging, incluido el archivo con los cambios que no están listos. Esto significa que debemos sacar ese archivo de Staging para poder hacer commit de todos los demás.
+## Github
 
-¡Al usar git rm lo que haremos será eliminar este archivo completamente de git! Todavía tendremos el historial de cambios de este archivo, con la eliminación del archivo como su última actualización. Recuerda que en este caso no buscábamos eliminar un archivo, solo dejarlo como estaba y actualizarlo después, no en este commit.
+### Cómo funcionan las llaves públicas y privadas
+- Las llaves públicas y privadas nos ayudan a cifrar y descifrar nuestros archivos de forma que los podamos compartir sin correr el riesgo de que sean interceptados por personas con malas intenciones.
++ La forma de hacerlo es la siguiente:
+  + Ambas personas deben crear su llave pública y privada.
+  + Ambas personas pueden compartir su llave pública a las otras partes (recuerda que esta llave es pública, no hay problema si la “interceptan”).
+  + La persona que quiere compartir un mensaje puede usar la llave pública de la otra persona para cifrar los archivos y asegurarse que solo puedan ser descifrados con la llave privada de la persona con la que queremos compartir el mensaje.
+  + El mensaje está cifrado y puede ser enviado a la otra persona sin problemas en caso de que los archivos sean interceptados.
+  + La persona a la que enviamos el mensaje cifrado puede usar su llave privada para descifrar el mensaje y ver los archivos.
+  + Puedes compartir tu llave pública pero nunca tu llave privada.
 
-En cambio, si usamos git reset HEAD, lo único que haremos será mover estos cambios de Staging a Unstaged. Seguiremos teniendo los últimos cambios del archivo, el repositorio mantendrá el archivo (no con sus últimos cambios pero sí con los últimos en los que hicimos commit) y no habremos perdido nada.
+### Configura tus llaves SSH en local
+- Generar tus llaves SSH. Recuerda que es muy buena idea proteger tu llave privada con una contraseña.
+`ssh-keygen -t rsa -b 4096 -C "tu@email.com"`
 
-Conclusión: Lo mejor que puedes hacer para salvar tu puesto y evitar un incendio en tu trabajo es conocer muy bien la diferencia y los riesgos de todos los comandos de Git.
+#### En Windows y Linux:
+-Encender el "servidor" de llaves SSH de tu computadora:
+`eval $(ssh-agent -s)`
+-Añadir tu llave SSH a este "servidor":
+`ssh-add ruta-donde-guardaste-tu-llave-privada`
+
+#### En Mac:
+-Encender el "servidor" de llaves SSH de tu computadora:
+`eval "$(ssh-agent -s)"`
